@@ -67,6 +67,43 @@
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% -200%;
+  }
+  100% {
+    background-position: 200% 200%;
+  }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 60%
+  );
+  background-size: 200% 200%;
+  animation: shimmer 2s linear infinite;
+  z-index: 1;
+}
+
+.animate-shimmer > * {
+  position: relative;
+  z-index: 2;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

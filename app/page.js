@@ -7,7 +7,7 @@ const mockPosts = [
   {
     username: "JohnDoe",
     platform: "Twitter",
-    content: "Having a rough day today...",
+    content: " ",
     avatar: "/twitter-avatar.png",
     timestamp: "2h",
     likes: 42,
@@ -16,7 +16,7 @@ const mockPosts = [
   {
     username: "JaneSmith",
     platform: "Instagram",
-    content: "Just got this new haircut! What do you think?",
+    content: " ",
     avatar: "/instagram-avatar.png",
     likes: 256,
     timestamp: "4h",
@@ -24,7 +24,7 @@ const mockPosts = [
   {
     username: "TechGuru",
     platform: "LinkedIn",
-    content: "Excited to share my latest article on AI trends!",
+    content: " ",
     avatar: "/linkedin-avatar.png",
     reactions: 78,
     comments: 12,
@@ -33,7 +33,7 @@ const mockPosts = [
   {
     username: "FoodieFan",
     platform: "Facebook",
-    content: "Check out this amazing recipe I tried!",
+    content: " ",
     avatar: "/facebook-avatar.png",
     likes: 123,
     shares: 45,
@@ -42,7 +42,7 @@ const mockPosts = [
   {
     username: "GamerPro",
     platform: "Reddit",
-    content: "What's your favorite indie game of the year?",
+    content: " ",
     avatar: "/reddit-avatar.png",
     upvotes: 789,
     comments: 56,
@@ -61,7 +61,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const handleNextPost = () => handleNext();
+    const handleNextPost = () => {
+      console.log("nextPost event received");
+      handleNext();
+    };
     window.addEventListener("nextPost", handleNextPost);
     return () => window.removeEventListener("nextPost", handleNextPost);
   }, [handleNext]);
@@ -75,9 +78,14 @@ export default function Home() {
 
   return (
     <main className="bg-cream min-h-screen flex flex-col items-center justify-center p-4 relative">
+      <div className="absolute top-4 left-4">
+        <h1 className="text-3xl font-dancing-script text-black-500">
+          Niceify.me
+        </h1>
+      </div>
       <a
         href="/about"
-        className="absolute top-4 right-8 text-black-500 hover:text-gray-600"
+        className="absolute top-6 right-8 text-black-500 hover:text-gray-600"
       >
         About
       </a>{" "}
@@ -87,7 +95,7 @@ export default function Home() {
       >
         <Card post={mockPosts[currentPost]} />
       </div>
-      <div className="mt-4 flex gap-4">
+      {/* <div className="mt-4 flex gap-4">
         <button
           onClick={handlePrevious}
           className="p-2 bg-gray-200 rounded hover:bg-gray-300"
@@ -100,7 +108,7 @@ export default function Home() {
         >
           Next →
         </button>
-      </div>
+      </div> */}
     </main>
   );
 }

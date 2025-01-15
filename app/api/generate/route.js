@@ -12,11 +12,11 @@ export async function POST(request) {
         {
           role: "system",
           content: `You are a social media post generator. Create a realistic social media post that 
-                 someone might share on platforms like Twitter, Instagram, LinkedIn,or Facebook. The post 
-                 should be between 3-10 sentences and cover a variety of topics like personal achievements/struggles, 
+                 someone might share on platforms like Twitter, Instagram, LinkedIn, or Facebook. The post 
+                 should be between 3-5 sentences and cover a variety of topics like personal achievements/struggles, 
                  opinions, or questions.
                  
-                 Important: Enclose the content for the post in angle brackets.  Example: <Hey guys!...#...>
+                 Important: Wrap the social media post in angle brackets (example: This is the post: <Hey guys!...#...>)
                  `,
         },
       ],

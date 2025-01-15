@@ -1,43 +1,28 @@
 import { useState, useEffect } from "react";
 import Confetti from "react-confetti";
 
-export default function Modal({ comment, post, generatedContent, onClose, showModal }) {
+export default function Modal({
+  comment,
+  post,
+  generatedContent,
+  onClose,
+  showModal,
+}) {
   const [nicenessScore, setNicenessScore] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [niceifiedComment, setNiceifiedComment] = useState("");
+  const [showNiceified, setShowNiceified] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [hasNiceified, setHasNiceified] = useState(false);
 
   // Reset state when modal opens
   useEffect(() => {
     if (showModal) {
-      // Reset all states immediately
-      setNicenessScore(0);
-      setFeedback("");
+      // Only reset loading state
       setIsLoading(true);
       setShowConfetti(false);
-      
-      // Force a re-render before showing the modal
-      setTimeout(() => {
-        setNicenessScore(0);
-        setFeedback("");
-      }, 0);
-    }
-  }, [showModal]);
-
-  // Reset state when modal opens
-  useEffect(() => {
-    if (showModal) {
-      // Reset all states immediately
-      setNicenessScore(0);
-      setFeedback("");
-      setIsLoading(true);
-      setShowConfetti(false);
-      
-      // Force a re-render before showing the modal
-      setTimeout(() => {
-        setNicenessScore(0);
-        setFeedback("");
-      }, 0);
     }
   }, [showModal]);
 
@@ -57,6 +42,7 @@ export default function Modal({ comment, post, generatedContent, onClose, showMo
         }
 
         const { score, feedback } = await response.json();
+        console.log("Received niceness score from API:", score);
         setNicenessScore(score);
         setFeedback(feedback);
         if (score >= 80) {
@@ -141,33 +127,103 @@ export default function Modal({ comment, post, generatedContent, onClose, showMo
                 <h3 className="font-medium">Feedback:</h3>
                 <p className="text-gray-600">{feedback}</p>
               </div>
+              {showNiceified && niceifiedComment && (
+                <div className="mt-4 p-4 bg-green-50 rounded-lg">
+                  <p className="text-sm text-green-800 mb-2">
+                    Here's your niceified comment:
+                  </p>
+                  <p className="text-gray-600 italic">{niceifiedComment}</p>
+                </div>
+              )}
             </div>
           )}
         </div>
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={() => {
-              // Reset states before closing
-              setNicenessScore(0);
-              setFeedback("");
-              setIsLoading(true);
-              setShowConfetti(false);
+        <div className="mt-6 flex justify-end gap-4">
+          {!isLoading && (
+            <>
+              <button
+                onClick={() => {
+                  console.log(
+                    `Retry button clicked. Current niceness score: ${nicenessScore}`
+                  );
+                  setNicenessScore(0);
+                  setFeedback("");
+                  setIsLoading(true);
+                  setShowConfetti(false);
+                  onClose(false);
+                }}
+                className="px-4 py-2 rounded-lg bg-gray-300 text-gray-700 hover:bg-gray-400"
+              >
+                Retry
+              </button>
               
-              onClose(nicenessScore > 60);
-              if (nicenessScore > 60) {
-                // Trigger next post action
-                const event = new CustomEvent('nextPost');
-                window.dispatchEvent(event);
-              }
-            }}
-            className={`px-4 py-2 rounded-lg ${
-              nicenessScore > 60 
-                ? "bg-blue-500 text-white hover:bg-blue-600" 
-                : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-            }`}
-          >
-            {nicenessScore > 60 ? "Post" : "Retry"}
-          </button>
+              {nicenessScore > 60 ? (
+                <button
+                  onClick={async () => {
+                    console.log('Post button clicked - proceeding to next post. Current states:', {
+                      nicenessScore,
+                      isButtonDisabled,
+                      hasNiceified
+                    });
+                    // Reset states before closing
+                    setNicenessScore(0);
+                    setFeedback("");
+                    setIsLoading(true);
+                    setShowConfetti(false);
+                    setNiceifiedComment("");
+                    setShowNiceified(false);
+                    setIsButtonDisabled(false);
+                    setHasNiceified(false);
+
+                    await onClose(true);
+                    const event = new CustomEvent("nextPost");
+                    window.dispatchEvent(event);
+                  }}
+                  className="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 cursor-pointer"
+                >
+                  Post
+                </button>
+              ) : (
+                <button
+                  onClick={async () => {
+                    console.log(`Niceify button clicked. Current niceness score: ${nicenessScore}, isButtonDisabled: ${isButtonDisabled}, hasNiceified: ${hasNiceified}`);
+                    if (!isButtonDisabled && !hasNiceified) {
+                      setIsButtonDisabled(true);
+                      try {
+                        const response = await fetch("/api/niceify", {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            comment,
+                            postContent: generatedContent,
+                          }),
+                        });
+
+                        if (!response.ok) throw new Error("Failed to niceify");
+
+                        const { niceifiedComment } = await response.json();
+                        setNiceifiedComment(niceifiedComment);
+                        setShowNiceified(true);
+                        setHasNiceified(true);
+                      } catch (error) {
+                        console.error("Error niceifying comment:", error);
+                      } finally {
+                        setIsButtonDisabled(false);
+                      }
+                    }
+                  }}
+                  className={`px-4 py-2 rounded-lg relative overflow-hidden bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white hover:from-yellow-500 hover:via-yellow-600 hover:to-yellow-700 ${
+                    hasNiceified ? "opacity-50 cursor-not-allowed" : "animate-shimmer"
+                  }`}
+                  disabled={hasNiceified}
+                >
+                  Niceify
+                </button>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

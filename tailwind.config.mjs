@@ -12,6 +12,9 @@ export default {
         foreground: "var(--foreground)",
         cream: '#FFFDD0',
       },
+      fontFamily: {
+        'dancing-script': ['var(--font-dancing-script)', 'cursive'],
+      },
     },
   },
   plugins: [],

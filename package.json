@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/dancing-script": "^5.1.1",
     "@lordicon/react": "^1.10.1",
     "groq-sdk": "^0.12.0",
     "next": "15.1.4",

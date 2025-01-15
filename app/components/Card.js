@@ -22,14 +22,16 @@ export default function Card({ post }) {
         setGeneratedContent(content);
       } catch (error) {
         console.error("Error generating content:", error);
-        setGeneratedContent(post.content); // Fallback to original content
+        setGeneratedContent(""); // Clear content on error
       } finally {
         setIsGenerating(false);
       }
     };
 
+    // Clear existing content while generating new
+    setGeneratedContent("");
     generatePostContent();
-  }, [post.content]);
+  }, [post]); // Changed dependency to entire post object
   const [comment, setComment] = useState("");
   const [showModal, setShowModal] = useState(false);
 
@@ -43,7 +45,7 @@ export default function Card({ post }) {
   const handleModalClose = (shouldClear) => {
     setShowModal(false);
     if (shouldClear) {
-      setComment('');
+      setComment("");
     }
   };
   const platformStyles = {
@@ -137,7 +139,7 @@ export default function Card({ post }) {
           )}
           <input
             type="text"
-            placeholder="Write a kind comment..."
+            placeholder="Write a nice comment..."
             className="w-full p-2 border rounded"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
