@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 const mockPosts = [
   {
-    username: "JohnDoe",
+    username: "John Doe",
     platform: "Twitter",
     content: " ",
     avatar: "/twitter-avatar.png",
@@ -14,7 +14,7 @@ const mockPosts = [
     retweets: 12,
   },
   {
-    username: "JaneSmith",
+    username: "Jane Smith",
     platform: "Instagram",
     content: " ",
     avatar: "/instagram-avatar.png",
@@ -22,7 +22,7 @@ const mockPosts = [
     timestamp: "4h",
   },
   {
-    username: "TechGuru",
+    username: "Tech Guru",
     platform: "LinkedIn",
     content: " ",
     avatar: "/linkedin-avatar.png",
@@ -78,10 +78,8 @@ export default function Home() {
 
   return (
     <main className="bg-cream min-h-screen flex flex-col items-center justify-center p-4 relative">
-      <div className="absolute top-4 left-4">
-        <h1 className="text-3xl font-dancing-script text-black-500">
-          Niceify.me
-        </h1>
+      <div className="absolute top-4 left-8">
+        <h1 className="text-3xl font-dancing-script text-black-500">Niceify</h1>
       </div>
       <a
         href="/about"
@@ -95,20 +93,6 @@ export default function Home() {
       >
         <Card post={mockPosts[currentPost]} />
       </div>
-      {/* <div className="mt-4 flex gap-4">
-        <button
-          onClick={handlePrevious}
-          className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          ← Previous
-        </button>
-        <button
-          onClick={handleNext}
-          className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Next →
-        </button>
-      </div> */}
     </main>
   );
 }

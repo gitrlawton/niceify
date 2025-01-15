@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 export default function Card({ post }) {
   const [generatedContent, setGeneratedContent] = useState(post.content);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const generatePostContent = async () => {
@@ -88,15 +89,23 @@ export default function Card({ post }) {
         flexDirection: "column",
       }}
     >
-      <div className="flex items-center mb-4">
-        <div className="w-10 h-10 bg-gray-300 rounded-full mr-3 flex items-center justify-center">
-          {styles.icon}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center">
+          <div className="w-10 h-10 bg-gray-300 rounded-full mr-3 flex items-center justify-center">
+            {styles.icon}
+          </div>
+          <div>
+            <div className="font-medium">{post.username}</div>
+            <div className={`text-sm ${styles.text}`}>{post.platform}</div>
+            <div className="text-xs text-gray-400">{post.timestamp}</div>
+          </div>
         </div>
-        <div>
-          <div className="font-medium">{post.username}</div>
-          <div className={`text-sm ${styles.text}`}>{post.platform}</div>
-          <div className="text-xs text-gray-400">{post.timestamp}</div>
-        </div>
+        <button
+          onClick={() => setIsEditing(!isEditing)}
+          className="text-sm text-gray-500 hover:text-gray-700"
+        >
+          {isEditing ? "Done" : "Edit"}
+        </button>
       </div>
       <div
         className="flex-1 overflow-y-auto mb-4"
@@ -108,8 +117,15 @@ export default function Card({ post }) {
               <div className="h-4 bg-gray-200 rounded mb-2"></div>
               <div className="h-4 bg-gray-200 rounded w-5/6"></div>
             </div>
+          ) : isEditing ? (
+            <textarea
+              value={generatedContent}
+              onChange={(e) => setGeneratedContent(e.target.value)}
+              className="w-full p-2 border rounded"
+              rows="11"
+            />
           ) : (
-            generatedContent
+            <div className="whitespace-pre-wrap">{generatedContent}</div>
           )}
         </div>
         {post.image && (

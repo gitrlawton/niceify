@@ -28,16 +28,7 @@ export default function About() {
           create a kinder online environment for everyone.
         </p>
         <p className="mb-4">
-          Built with{" "}
-          <a
-            href="https://codebuff.com/referrals/ref-74314514-f658-450b-9fcc-f8c841b0711d"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-800 hover:underline"
-          >
-            codebuff
-          </a>{" "}
-          by{" "}
+          Built by{" "}
           <a
             href="https://www.linkedin.com/in/rlawton714/"
             target="_blank"
@@ -45,6 +36,15 @@ export default function About() {
             className="text-blue-800 hover:underline"
           >
             Ryan Lawton
+          </a>{" "}
+          using{" "}
+          <a
+            href="https://codebuff.com/referrals/ref-74314514-f658-450b-9fcc-f8c841b0711d"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-800 hover:underline"
+          >
+            codebuff
           </a>
           .
         </p>

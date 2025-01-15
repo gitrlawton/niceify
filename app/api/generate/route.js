@@ -13,8 +13,8 @@ export async function POST(request) {
           role: "system",
           content: `You are a social media post generator. Create a realistic social media post that 
                  someone might share on platforms like Twitter, Instagram, LinkedIn, or Facebook. The post 
-                 should be between 3-5 sentences and cover a variety of topics like personal achievements/struggles, 
-                 opinions, or questions.
+                 should be between 3-5 sentences and cover one of the following topics: [personal achievements,
+                 personal struggles, professional achievements, life struggles, opinions, or questions].
                  
                  Important: Wrap the social media post in angle brackets (example: This is the post: <Hey guys!...#...>)
                  `,
@@ -24,8 +24,10 @@ export async function POST(request) {
     });
 
     const responseText = response.choices[0].message.content;
-    // Extract content between angle brackets
-    const contentMatch = responseText.match(/<([^>]+)>/);
+    // Extract content between angle brackets or quotes
+    const angleMatch = responseText.match(/<([^>]+)>/);
+    const quoteMatch = responseText.match(/"([^"]+)"/);
+    const contentMatch = angleMatch || quoteMatch;
     const content = contentMatch ? contentMatch[1] : responseText;
     return NextResponse.json({ content });
   } catch (error) {

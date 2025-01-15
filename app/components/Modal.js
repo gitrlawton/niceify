@@ -130,7 +130,7 @@ export default function Modal({
               {showNiceified && niceifiedComment && (
                 <div className="mt-4 p-4 bg-green-50 rounded-lg">
                   <p className="text-sm text-green-800 mb-2">
-                    Here's your niceified comment:
+                    Here's your niceified comment. Copy it and click "Retry"
                   </p>
                   <p className="text-gray-600 italic">{niceifiedComment}</p>
                 </div>
@@ -156,15 +156,18 @@ export default function Modal({
               >
                 Retry
               </button>
-              
+
               {nicenessScore > 60 ? (
                 <button
                   onClick={async () => {
-                    console.log('Post button clicked - proceeding to next post. Current states:', {
-                      nicenessScore,
-                      isButtonDisabled,
-                      hasNiceified
-                    });
+                    console.log(
+                      "Post button clicked - proceeding to next post. Current states:",
+                      {
+                        nicenessScore,
+                        isButtonDisabled,
+                        hasNiceified,
+                      }
+                    );
                     // Reset states before closing
                     setNicenessScore(0);
                     setFeedback("");
@@ -186,7 +189,9 @@ export default function Modal({
               ) : (
                 <button
                   onClick={async () => {
-                    console.log(`Niceify button clicked. Current niceness score: ${nicenessScore}, isButtonDisabled: ${isButtonDisabled}, hasNiceified: ${hasNiceified}`);
+                    console.log(
+                      `Niceify button clicked. Current niceness score: ${nicenessScore}, isButtonDisabled: ${isButtonDisabled}, hasNiceified: ${hasNiceified}`
+                    );
                     if (!isButtonDisabled && !hasNiceified) {
                       setIsButtonDisabled(true);
                       try {
@@ -215,7 +220,9 @@ export default function Modal({
                     }
                   }}
                   className={`px-4 py-2 rounded-lg relative overflow-hidden bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white hover:from-yellow-500 hover:via-yellow-600 hover:to-yellow-700 ${
-                    hasNiceified ? "opacity-50 cursor-not-allowed" : "animate-shimmer"
+                    hasNiceified
+                      ? "opacity-50 cursor-not-allowed"
+                      : "animate-shimmer"
                   }`}
                   disabled={hasNiceified}
                 >
