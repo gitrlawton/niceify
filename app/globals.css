@@ -2,6 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes cardSwap {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-100%) scale(0.8);
+    opacity: 0;
+  }
+  51% {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.card-swap-next {
+  animation: cardSwapNext 0.5s ease-in-out;
+}
+
+.card-swap-prev {
+  animation: cardSwapPrev 0.5s ease-in-out;
+}
+
+@keyframes cardSwapNext {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-100%) scale(0.8);
+    opacity: 0;
+  }
+  51% {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes cardSwapPrev {
+  0% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+  }
+  51% {
+    transform: translateX(-100%) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

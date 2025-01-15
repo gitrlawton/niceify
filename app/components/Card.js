@@ -1,14 +1,49 @@
-import { useState } from 'react';
-import Modal from './Modal';
+import Modal from "./Modal";
+
+import { useState, useEffect } from "react";
 
 export default function Card({ post }) {
-  const [comment, setComment] = useState('');
+  const [generatedContent, setGeneratedContent] = useState(post.content);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  useEffect(() => {
+    const generatePostContent = async () => {
+      setIsGenerating(true);
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to generate content");
+        }
+
+        const { content } = await response.json();
+        setGeneratedContent(content);
+      } catch (error) {
+        console.error("Error generating content:", error);
+        setGeneratedContent(post.content); // Fallback to original content
+      } finally {
+        setIsGenerating(false);
+      }
+    };
+
+    generatePostContent();
+  }, [post.content]);
+  const [comment, setComment] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (comment.trim()) {
       setShowModal(true);
+    }
+  };
+
+  const handleModalClose = (shouldClear) => {
+    setShowModal(false);
+    if (shouldClear) {
+      setComment('');
     }
   };
   const platformStyles = {
@@ -65,7 +100,16 @@ export default function Card({ post }) {
         className="flex-1 overflow-y-auto mb-4"
         style={{ maxHeight: "300px" }}
       >
-        <div>{post.content}</div>
+        <div>
+          {isGenerating ? (
+            <div className="animate-pulse">
+              <div className="h-4 bg-gray-200 rounded mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            </div>
+          ) : (
+            generatedContent
+          )}
+        </div>
         {post.image && (
           <img
             src={post.image}
@@ -83,9 +127,12 @@ export default function Card({ post }) {
       <div style={{ flexShrink: 0, marginTop: "auto" }}>
         <form onSubmit={handleSubmit} className="border-t pt-4">
           {showModal && (
-            <Modal 
+            <Modal
               comment={comment}
-              onClose={() => setShowModal(false)}
+              post={post}
+              generatedContent={generatedContent}
+              showModal={showModal}
+              onClose={(shouldClear) => handleModalClose(shouldClear)}
             />
           )}
           <input

@@ -1,7 +1,7 @@
 "use client";
 
 import Card from "./components/Card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const mockPosts = [
   {
@@ -18,7 +18,6 @@ const mockPosts = [
     platform: "Instagram",
     content: "Just got this new haircut! What do you think?",
     avatar: "/instagram-avatar.png",
-    image: "/haircut.jpg",
     likes: 256,
     timestamp: "4h",
   },
@@ -36,7 +35,6 @@ const mockPosts = [
     platform: "Facebook",
     content: "Check out this amazing recipe I tried!",
     avatar: "/facebook-avatar.png",
-    image: "/recipe.jpg",
     likes: 123,
     shares: 45,
     timestamp: "3h",
@@ -51,22 +49,44 @@ const mockPosts = [
     timestamp: "5h",
   },
 ];
-
 export default function Home() {
   const [currentPost, setCurrentPost] = useState(0);
-
-
+  const [animationClass, setAnimationClass] = useState("");
 
   const handleNext = () => {
-    setCurrentPost((prev) => (prev + 1) % mockPosts.length);
+    setAnimationClass("card-swap-next");
+    setTimeout(() => {
+      setCurrentPost((prev) => (prev + 1) % mockPosts.length);
+    }, 250); // Halfway through the animation
   };
 
+  useEffect(() => {
+    const handleNextPost = () => handleNext();
+    window.addEventListener("nextPost", handleNextPost);
+    return () => window.removeEventListener("nextPost", handleNextPost);
+  }, [handleNext]);
+
   const handlePrevious = () => {
-    setCurrentPost((prev) => (prev === 0 ? mockPosts.length - 1 : prev - 1));
+    setAnimationClass("card-swap-prev");
+    setTimeout(() => {
+      setCurrentPost((prev) => (prev === 0 ? mockPosts.length - 1 : prev - 1));
+    }, 250); // Halfway through the animation
   };
 
   return (
-    <main className="bg-cream min-h-screen flex flex-col items-center justify-center p-4">        <Card post={mockPosts[currentPost]} />
+    <main className="bg-cream min-h-screen flex flex-col items-center justify-center p-4 relative">
+      <a
+        href="/about"
+        className="absolute top-4 right-8 text-black-500 hover:text-gray-600"
+      >
+        About
+      </a>{" "}
+      <div
+        className={animationClass}
+        onAnimationEnd={() => setAnimationClass("")}
+      >
+        <Card post={mockPosts[currentPost]} />
+      </div>
       <div className="mt-4 flex gap-4">
         <button
           onClick={handlePrevious}
