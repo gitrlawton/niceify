@@ -1,6 +1,6 @@
 # Niceify
 
-Built by [Ryan Lawton](https://www.linkedin.com/in/rlawton714/) with [codebuff](https://codebuff.com/referrals/ref-74314514-f658-450b-9fcc-f8c841b0711d) for the [Nosu AI Hackathon](https://nosu-ai-hackathon.devpost.com/).
+Built by [Ryan Lawton](https://www.linkedin.com/in/rlawton714/) for the [Nosu AI Hackathon](https://nosu-ai-hackathon.devpost.com/).
 
 ## Overview
 
